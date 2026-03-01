@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    width: 100vw;
+}
+
+.party-list-item {
+    padding: 5px;
+    margin: 5px;
+    border: solid 2px gray;
+    border-radius: 5px;
+    user-select: none;
+    cursor: pointer;
+}
+
+.party-list-item:hover {
+    background-color: lightgray;
+}
+
+
+.vertical_split {
+    display: flex;
+    width: 100;
+    max-width: 100%;
+
+}
+
+.party-list-container {
+    padding: 5px;
+    max-width: 50%;
+    flex-basis: 50%;
+}
+
+.party-details-container {
+    padding: 5px;
+    max-width: 50%;
+    flex-basis: 50%;
+}
