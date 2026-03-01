@@ -4,7 +4,7 @@ const state = {
 }
 
 const BASE_URL = 'https://fsa-crud-2aa9294fe819.herokuapp.com/api/'; 
-const COHORT = '2601-FTB-CT-WEB-PT';
+const COHORT = '2601-FTB-CT-WEB-PT-IAN';
 const API = `${BASE_URL}${COHORT}`;
 const app = document.querySelector('#app');
 
@@ -41,11 +41,14 @@ const createPartyListItem = (party) => {
     partyListItem.addEventListener('click', async () => {
         const partyDetails = await fetchPartyDetails(party);
 
+    console.log('Party Details: ', partyDetails);
+
         state.selectedParty = partyDetails;
 
         render();
     });
 
+    
 
     partyListItem.append(partyListItemName);
 
