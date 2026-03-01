@@ -1,6 +1,6 @@
 const state = {
     parties: [],
-    selectedParty: [],
+    selectedParty: null,
 }
 
 const BASE_URL = 'https://fsa-crud-2aa9294fe819.herokuapp.com/api/'; 
@@ -16,6 +16,20 @@ mainContainer.classList.add('vertical_split');
 
 app.append(pageHeader, mainContainer);
 
+const fetchParties = async () => {
+     const partiesResponse = await fetch (`${API}/events`);
+     const partiesJSON = await partiesResponse.json();
+
+     return partiesJSON.data;
+};
+
+const fetchPartyDetails = async (party) => {
+    const partyDetailsResponse = await fetch(`${API}/events/${party.id}`);
+    const partyDetailsJSON = await partyDetailsResponse.json();
+
+    return partyDetailsJSON.data;
+}
+
 const createPartyListItem = (party) => {
     const partyListItem = document.createElement ('div');
     partyListItem.classList.add('party-list-item');
@@ -23,6 +37,15 @@ const createPartyListItem = (party) => {
     const partyListItemName = document.createElement('span');
 
     partyListItemName.textContent = party.name;
+
+    partyListItem.addEventListener('click', async () => {
+        const partyDetails = await fetchPartyDetails(party);
+
+        state.selectedParty = partyDetails;
+
+        render();
+    });
+
 
     partyListItem.append(partyListItemName);
 
@@ -50,40 +73,53 @@ const createPartyList = (parties) => {
 
 }
 
-/*const createPartyDetails = (partyDetails) => {
+const createPartyDetails = (partyDetails) => {
     const partyDetailsContainer = document.createElement ('div');
     partyDetailsContainer.classList.add('party-details-container');
 
     const partyDetailsHeader = document.createElement('h2');
     partyDetailsHeader.textContent = 'Party Details';
 
-    if (!partyDetails) {
+    partyDetailsContainer.append(partyDetailsHeader);
+
+   if (!partyDetails) {
         const noDetailsText = document.createElement('span');
-        noDetailsText.textConstent = 'No party selected. Please select a party.';
+        noDetailsText.textContent = 'No party selected. Please select a party.';
 
         partyDetailsContainer.append(noDetailsText);
     } else {
         const partyDetails = document.createElement('div');
-        partyDetails.classListAdd('party-details');
+        partyDetails.classList.add('party-details');
+
+        const subPartyDetailsHeader = document.createElement('h4');
+        subPartyDetailsHeader.textContent = `${state.selectedParty.name} #${state.selectedParty.id}`;
+
+        const subPartyDetailsDate = document.createElement('span');
+        subPartyDetailsDate.textContent = state.selectedParty.date;
+
+        const subPartyDetailsLocation = document.createElement('span');
+        subPartyDetailsLocation.textContent = state.selectedParty.location;
+
+        const subPartyDetailsDescription = document.createElement('p');
+        subPartyDetailsDescription.textContent = state.selectedParty.description;
+
+        partyDetails.append(
+            subPartyDetailsHeader,
+            subPartyDetailsDate,
+            subPartyDetailsLocation,
+            subPartyDetailsDescription,
+        )
     }
 
-    partyDetails.append(partyDetailsContainer);
+    return partyDetailsContainer;
 
-    return partyDetails;
-
-};*/
-
-const fetchParties = async () => {
-     const partiesResponse = await fetch (`${API}/events`);
-     const partiesJSON = await partiesResponse.json();
-
-     return partiesJSON.data;
 };
 
 function render () {
     const partyList = createPartyList(state.parties);
+    const partyDetails = createPartyDetails(state.selectedParty);
 
-    mainContainer.replaceChildren(partyList);
+    mainContainer.replaceChildren(partyList, partyDetails);
 }
 
 const startApp = async () => {
