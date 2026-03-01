@@ -91,14 +91,17 @@ const createPartyDetails = (partyDetails) => {
 
         partyDetailsContainer.append(noDetailsText);
     } else {
-        const partyDetails = document.createElement('div');
-        partyDetails.classList.add('party-details');
+        const subPartyDetails = document.createElement('div');
+        subPartyDetails.classList.add('party-details');
 
         const subPartyDetailsHeader = document.createElement('h4');
         subPartyDetailsHeader.textContent = `${state.selectedParty.name} #${state.selectedParty.id}`;
 
         const subPartyDetailsDate = document.createElement('span');
-        subPartyDetailsDate.textContent = state.selectedParty.date;
+        const formattedDate = new Date(state.selectedParty.date).toLocaleString();
+        subPartyDetailsDate.textContent = formattedDate;
+
+        const newLine = document.createElement('br');
 
         const subPartyDetailsLocation = document.createElement('span');
         subPartyDetailsLocation.textContent = state.selectedParty.location;
@@ -106,12 +109,17 @@ const createPartyDetails = (partyDetails) => {
         const subPartyDetailsDescription = document.createElement('p');
         subPartyDetailsDescription.textContent = state.selectedParty.description;
 
-        partyDetails.append(
+        console.log('partyDetails received')
+
+        subPartyDetails.append(
             subPartyDetailsHeader,
             subPartyDetailsDate,
+            newLine,
             subPartyDetailsLocation,
             subPartyDetailsDescription,
         )
+
+        partyDetailsContainer.append(subPartyDetails);
     }
 
     return partyDetailsContainer;
